@@ -1,46 +1,54 @@
-const osmosis =  require('osmosis');
+const osmosis = require('osmosis');
 const _ = require('lodash');
 
 const session2018URL = `http://lis.virginia.gov/cgi-bin/legp604.exe?191+lst+ALL`;
-const bills = []
+const bills = {}
 
 osmosis
     .get(session2018URL)
-    // .find('.linkSect li')
-    // .set('name' )
-    // // // .follow('@href')
-    // .find('.linkSect li a')
-    // .set('number')
     .set(
-        { 
+        {
             names: ['ul.linkSect:first-of-type li'],
             numbers: ['ul.linkSect:first-of-type li a']
         }
     )
-    // .find('')
-    // .follow('@href')
     .paginate('ul:nth-of-type(2) li a')
-    // .find('p > a')
-    // .follow('@href')
-    // .set({
-    //     'title':        'section > h2',
-    //     'description':  '#postingbody',
-    //     'subcategory':  'div.breadbox > span[4]',
-    //     'date':         'time@datetime',
-    //     'latitude':     '#map@data-latitude',
-    //     'longitude':    '#map@data-longitude',
-    //     'images':       ['img@src']
-    // })
-    // .follow('More...')
-    // .paginate('@href')
+    .find('ul.linkSect:first-of-type li a')
+    .follow('@href')
+    .set({
+        fullName: 'h3.topLine',
+        history: ['#mainC h4:last-of-type + ul.linkSect li']
+    })
     .data((bill) => {
         // do something with listing data
-        // console.log("bill", bill);
-        _.forEach(bill.names, (name, index) => {
-            bills.push({name, number: bill.numbers[index]})
-        });
-        console.log('bills', bills, bills.length);
-        
+        // console.log("bill", bill.history);
+        if (!_.isEmpty(bill.history)) {
+            // console.log("bill history", bill.history, bill.fullName);
+            if (!_.isEmpty(bills)) {
+                // console.log("bill key 1", bills[Object.keys(bills)[0]])
+                const foundBill = _.find(bills, dataBill => {
+                    // console.log("dataBill", dataBill);
+                    return bill.fullName.replace(/\s+/, "") === dataBill.name.replace(/\s+/, "")
+                })
+                if (foundBill) {
+                    foundBill.history = bill.history;
+                    // console.log("foundBill", foundBill);
+                }
+            }
+        }
+        if (bill.numbers) {
+            // console.log("names", bill.names)
+            if (Object.keys(bills).length < bill.numbers.length) {
+                // console.log("putting in data")
+                bill.numbers.forEach((number, index) => {
+                    bills[number] = {
+                        number,
+                        name: bill.names[index]
+                    }
+                })
+            }
+        }
+
     })
     // .log(console.log)
     .error(console.log)
@@ -49,5 +57,5 @@ osmosis
     })
     // .debug(console.log)
     .done(data => {
-        // console.log('bills', bills);
+        console.log('bills', Object.keys(bills).length, _.map(bills, 'history'));
     })
