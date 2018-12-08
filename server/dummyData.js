@@ -55,7 +55,7 @@ export default function () {
     }
 
     const billsArr = _.map(allBills, bill => {
-      const {number, name, history, sponsor, committeeText, subcommiteeText, link} = bill;
+      const {number, name, summary, sponsor, committeeText, subcommiteeText, link} = bill;
       return {
         number,
         name,
@@ -63,21 +63,23 @@ export default function () {
         committeeText,
         link,
         subcommiteeText,
-        isFavorite: false
+        isFavorite: false,
+        summary
       }
     });
 
     Bill.create(billsArr, (err) => {
       if(err) {
-        console.error('something went wrong', err)
+        console.error('something went wrong with bill creation', err)
       } else {
         console.log("got all bills into db");
         _.forEach(allBills, bill => {
           const {history, number} = bill;
-          History.create(history, (err, historyItems) => {
-            Bill.findOneAndUpdate({number}, {historyItems}, (err, bill) => {
-              if(err) {
-                console.error("something went wrong", err);
+          History.create(history, (histerr, historyItems) => {
+            if(histerr) console.error("something went wrong in history creation", histerr);
+            Bill.findOneAndUpdate({number}, {historyItems}, (billUpdateErr, bill) => {
+              if(billUpdateErr) {
+                console.error("something went wrong with history addition to bill", billUpdateErr);
               }
             })
           })
