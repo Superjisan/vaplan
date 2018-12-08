@@ -18,3 +18,13 @@ export function getBills(req, res) {
     });
   }
 
+export function updateBill(req, res) {
+  const {number, bill} = req.params;
+  Bill.findOneAndUpdate({number}, bill, (err, updatedBill) => {
+    if(err) {
+      rest.status(500).send(err);
+    }
+    res.json({bill: updatedBill});
+  })
+}
+

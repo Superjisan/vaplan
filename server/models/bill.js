@@ -13,7 +13,8 @@ const billSchema = new Schema({
   subcommitteeText: { type: 'String' },
   sponsor: {type: 'String'},
   link: {type: 'String'},
-  historyItems: [historySchema]
+  historyItems: [historySchema],
+  isFavorite: {type: 'Boolean'}
 });
 
 export const History = mongoose.model('History', historySchema)

@@ -62,10 +62,10 @@ export default function () {
         sponsor,
         committeeText,
         link,
-        subcommiteeText
+        subcommiteeText,
+        isFavorite: false
       }
     });
-    console.log('billsArr', billsArr[0]);
 
     Bill.create(billsArr, (err) => {
       if(err) {
@@ -75,10 +75,9 @@ export default function () {
         _.forEach(allBills, bill => {
           const {history, number} = bill;
           History.create(history, (err, historyItems) => {
-            console.log('histories', historyItems);
             Bill.findOneAndUpdate({number}, {historyItems}, (err, bill) => {
-              if(!err) {
-                console.log("added history properly", historyItems)
+              if(err) {
+                console.error("something went wrong", err);
               }
             })
           })
