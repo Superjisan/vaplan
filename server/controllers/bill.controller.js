@@ -1,5 +1,4 @@
-import Bill from '../models/bill';
-
+import {Bill} from '../models/bill';
 
 
 /**
@@ -8,12 +7,14 @@ import Bill from '../models/bill';
  * @param res
  * @returns void
  */
-export function getBill(req, res) {
-    Post.find().sort('-dateAdded').exec((err, posts) => {
+export function getBills(req, res) {
+    Bill.find()
+    .populate('historyItems')
+    .exec((err, bills) => {
       if (err) {
         res.status(500).send(err);
       }
-      res.json({ posts });
+      res.json({ bills});
     });
   }
 

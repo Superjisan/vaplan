@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import * as BillController from '../controllers/post.controller';
+import * as BillController from '../controllers/bill.controller';
 const router = new Router();
 
 // Get all Bills
-router.route('/bills').get(BillController.getbills);
+router.route('/bills').get(BillController.getBills);
 
 // // Get one post by number
 // router.route('/bills/:number').get(BillController.getPost);

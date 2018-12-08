@@ -3,7 +3,7 @@ import _ from "lodash";
 import Post from './models/post';
 import {Bill, History} from './models/bill';
 
-import {allBills} from './allBills.json';
+import allBills from './allBills.json';
 
 export default function () {
   Post.count().exec((err, count) => {
@@ -62,8 +62,7 @@ export default function () {
         sponsor,
         committeeText,
         link,
-        subcommiteeText,
-        history: History.create(history)
+        subcommiteeText
       }
     });
     console.log('billsArr', billsArr[0]);
@@ -73,6 +72,17 @@ export default function () {
         console.error('something went wrong', err)
       } else {
         console.log("got all bills into db");
+        _.forEach(allBills, bill => {
+          const {history, number} = bill;
+          History.create(history, (err, historyItems) => {
+            console.log('histories', historyItems);
+            Bill.findOneAndUpdate({number}, {historyItems}, (err, bill) => {
+              if(!err) {
+                console.log("added history properly", historyItems)
+              }
+            })
+          })
+        })
       }
     })
 
