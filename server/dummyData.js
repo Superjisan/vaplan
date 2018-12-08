@@ -1,4 +1,9 @@
+import _ from "lodash";
+
 import Post from './models/post';
+import {Bill, History} from './models/bill';
+
+import {allBills} from './allBills.js';
 
 export default function () {
   Post.count().exec((err, count) => {
@@ -43,4 +48,33 @@ export default function () {
       }
     });
   });
+
+  Bill.count().exec((err, count) =>  {
+    if (count > 0) {
+      return;
+    }
+
+    const billsArr = _.map(allBills, bill => {
+      const {number, name, history, sponsor, committeeText, subcommiteeText, link} = bill;
+      return {
+        number,
+        name,
+        sponsor,
+        committeeText,
+        link,
+        subcommiteeText,
+        history: History.create(history)
+      }
+    });
+    console.log('billsArr', billsArr[0]);
+
+    Bill.create(billsArr, (err) => {
+      if(err) {
+        console.error('something went wrong', err)
+      } else {
+        console.log("got all bills into db");
+      }
+    })
+
+  })
 }
