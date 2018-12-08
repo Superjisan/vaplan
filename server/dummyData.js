@@ -3,7 +3,7 @@ import _ from "lodash";
 import Post from './models/post';
 import {Bill, History} from './models/bill';
 
-import {allBills} from './allBills.js';
+import {allBills} from './allBills.json';
 
 export default function () {
   Post.count().exec((err, count) => {
