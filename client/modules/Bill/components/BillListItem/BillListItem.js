@@ -15,7 +15,7 @@ function BillListItem(props) {
                 </Link>
             </h3>
             <p className={styles['author-name']}><FormattedMessage id="by" /> {props.bill.sponsor}</p>
-            <p className={styles['bill-desc']}>{props.bill}</p>
+            <p className={styles['bill-desc']}>{props.bill.summary}</p>
             <hr className={styles.divider} />
         </div>
     );
@@ -29,6 +29,7 @@ BillListItem.propTypes = {
         sponsor: PropTypes.string,
         committeeText: PropTypes.string,
         subcommitteText: PropTypes.string,
+        summary: PropTypes.string,
         history: PropTypes.shape({
             text: PropTypes.string,
             date: PropTypes.string

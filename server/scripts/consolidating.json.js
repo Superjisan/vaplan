@@ -15,7 +15,7 @@ _.forEach(bills, bill => {
     }
 });
 
-allBills = _.uniq(allBills, 'name');
+allBills = _.uniqBy(allBills, 'number');
 const allBillsJSON = JSON.stringify(allBills);
 
 fs.writeFile(`../../server/allBills.json`, allBillsJSON, (err) => {

@@ -28,6 +28,7 @@ BillList.propTypes = {
         sponsor: PropTypes.string,
         committeeText: PropTypes.string,
         subcommitteText: PropTypes.string,
+        summary: PropTypes.string,
         history: PropTypes.shape({
             text: PropTypes.string,
             date: PropTypes.string

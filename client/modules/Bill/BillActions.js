@@ -13,7 +13,6 @@ export const addBills = (bills) => {
 export function fetchBills() {
     return (dispatch) => {
         return callApi('bills').then(res => {
-            console.log("bills", res.bills)
             return dispatch(addBills(res.bills));
         });
     }
