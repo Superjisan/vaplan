@@ -8,7 +8,7 @@ router.route('/bills').get(BillController.getBills);
 // // Get one post by number
 // router.route('/bills/:number').get(BillController.getPost);
 
-// // Add a new Post
+// Update a bill
 router.route('/bills/:number').put(BillController.updateBill);
 
 // // Delete a post by number

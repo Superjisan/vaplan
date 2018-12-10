@@ -1,6 +1,5 @@
 import { Bill } from '../models/bill';
 
-
 /**
  * Get all bills
  * @param req
@@ -8,7 +7,11 @@ import { Bill } from '../models/bill';
  * @returns void
  */
 export function getBills(req, res) {
-  Bill.find()
+  let filter = {};
+  if (req.query) {
+    filter = req.query;
+  }
+  Bill.find(filter)
     .populate('historyItems')
     .exec((err, bills) => {
       if (err) {

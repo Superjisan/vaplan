@@ -1,3 +1,4 @@
+import querystring from "querystring";
 import callApi from '../../util/apiCaller';
 
 export const UPDATE_BILL = 'UPDATE_BILL';
@@ -28,4 +29,10 @@ export const updateBill = bill => {
 export const updateBillRequest = (bill) => dispatch => {
     return callApi(`bills/${bill.number}`, 'put', { bill })
         .then(res => dispatch(updateBill(res.bill)))
+}
+
+export const searchBillsRequest = filter => dispatch => {
+    return callApi(`bills?${querystring.stringify(filter)}`).then(res => {
+        return dispatch(addBills(res.bills));
+    })
 }

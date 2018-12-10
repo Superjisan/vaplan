@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import BillList from '../../components/BillList';
+import BillListFilter from '../../components/BillListFilter/BillListFilter';
 
-import { fetchBills, updateBillRequest } from '../../BillActions';
+import { fetchBills, updateBillRequest, searchBillsRequest } from '../../BillActions';
 
 // Import Selectors
 import { getBills } from '../../BillReducer';
@@ -14,8 +15,11 @@ class BillListPage extends Component {
         this.props.dispatch(fetchBills());
     }
 
+    handleSearch = filter => {
+        this.props.dispatch(searchBillsRequest(filter))
+    }
+
     handleFavoriteBill = bill => {
-        console.log("getting here", bill);
         bill.isFavorite = !bill.isFavorite;
         this.props.dispatch(updateBillRequest(bill))
     }
@@ -23,6 +27,7 @@ class BillListPage extends Component {
     render() {
         return (
             <div>
+                <BillListFilter handleSearch={this.handleSearch} />
                 <BillList bills={this.props.bills} handleFavoriteBill={this.handleFavoriteBill} />
             </div>
         )
