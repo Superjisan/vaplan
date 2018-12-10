@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 import Post from './models/post';
-import {Bill, History} from './models/bill';
+import { Bill, History } from './models/bill';
 
 import allBills from './allBills.json';
 
@@ -49,13 +49,13 @@ export default function () {
     });
   });
 
-  Bill.count().exec((err, count) =>  {
+  Bill.count().exec((err, count) => {
     if (count > 0) {
       return;
     }
 
     const billsArr = _.map(allBills, bill => {
-      const {number, name, summary, sponsor, committeeText, subcommiteeText, link} = bill;
+      const { number, name, summary, sponsor, committeeText, subcommiteeText, link } = bill;
       return {
         number,
         name,
@@ -69,18 +69,19 @@ export default function () {
     });
 
     Bill.create(billsArr, (err) => {
-      if(err) {
+      if (err) {
         console.error('something went wrong with bill creation', err)
       } else {
         console.log("got all bills into db");
         _.forEach(allBills, bill => {
-          const {history, number} = bill;
-          History.create(history, (histerr, historyItems) => {
-            if(histerr) console.error("something went wrong in history creation", histerr);
-            Bill.findOneAndUpdate({number}, {historyItems}, (billUpdateErr, bill) => {
-              if(billUpdateErr) {
+          const { history, number } = bill;
+          return History.create(history, (histerr, historyItems) => {
+            if (histerr) console.error("something went wrong in history creation", histerr);
+            Bill.findOneAndUpdate({ number }, { historyItems }, (billUpdateErr, bill) => {
+              if (billUpdateErr) {
                 console.error("something went wrong with history addition to bill", billUpdateErr);
               }
+              return
             })
           })
         })
