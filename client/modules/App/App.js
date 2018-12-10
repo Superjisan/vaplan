@@ -51,6 +51,9 @@ export class App extends Component {
                 content: 'width=device-width, initial-scale=1',
               },
             ]}
+            link={[
+              { rel: "stylesheet", href: "https://fonts.googleapis.com/css?family=Roboto:300,400,500" }
+            ]}
           />
           <Header
             switchLanguage={lang => this.props.dispatch(switchLanguage(lang))}

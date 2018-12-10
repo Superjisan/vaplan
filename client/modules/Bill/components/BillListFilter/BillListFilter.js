@@ -25,11 +25,13 @@ export class BillListFilter extends Component {
 
     render() {
         return (
-            <div className="">
-                <h2>Search By</h2>
-                <label htmlFor="isFavorite">Favorite</label>
-                <input type="checkbox" checked={this.state.isFavorite} onChange={this.handleFavorite} />
-                <button onClick={this.handleSearchButton}>Search</button>
+            <div className={styles.form}>
+                <div className={styles['form-content']}>
+                    <h2 className={styles['form-title']}>Search By</h2>
+                    <label htmlFor="isFavorite">Favorite</label>
+                    <input type="checkbox" checked={this.state.isFavorite} onChange={this.handleFavorite} />
+                    <button className={styles['search-submit-button']} onClick={this.handleSearchButton}>Search</button>
+                </div>
             </div>
         )
     }
