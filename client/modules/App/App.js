@@ -27,7 +27,7 @@ export class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({isMounted: true}); // eslint-disable-line
+    this.setState({ isMounted: true }); // eslint-disable-line
   }
 
   toggleAddPostSection = () => {
@@ -40,7 +40,6 @@ export class App extends Component {
         <div>
           <Helmet
             title="VA PLAN"
-            titleTemplate="%s - VA PLAN"
             meta={[
               { charset: 'utf-8' },
               {

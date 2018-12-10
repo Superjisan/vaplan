@@ -17,3 +17,15 @@ export function fetchBills() {
         });
     }
 }
+
+export const updateBill = bill => {
+    return {
+        type: UPDATE_BILL,
+        bill
+    }
+}
+
+export const updateBillRequest = (bill) => dispatch => {
+    return callApi(`bills/${bill.number}`, 'put', { bill })
+        .then(res => dispatch(updateBill(res.bill)))
+}

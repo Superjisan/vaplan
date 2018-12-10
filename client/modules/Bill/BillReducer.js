@@ -1,20 +1,19 @@
 import _ from "lodash";
 
-import {UPDATE_BILL, ADD_BILLS } from './BillActions';
+import { UPDATE_BILL, ADD_BILLS } from './BillActions';
 
 // Initial State
 const initialState = { data: [] };
 
 const BillReducer = (state = initialState, action) => {
   switch (action.type) {
-    case UPDATE_BILL :
+    case UPDATE_BILL:
       const billToUpdateIndex = _.findIndex(state.data, bill => action.bill.number === bill.number);
-      state.data[billToUpdateIndex] = action.bill
-      return {
-        data: state.data,
-      };
-    
-    case ADD_BILLS :
+      const copyState = _.cloneDeep(state);
+      copyState.data[billToUpdateIndex] = action.bill
+      return copyState
+
+    case ADD_BILLS:
       return {
         data: action.bills,
       };

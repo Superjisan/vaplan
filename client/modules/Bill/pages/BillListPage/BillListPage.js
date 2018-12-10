@@ -15,6 +15,7 @@ class BillListPage extends Component {
     }
 
     handleFavoriteBill = bill => {
+        console.log("getting here", bill);
         bill.isFavorite = !bill.isFavorite;
         this.props.dispatch(updateBillRequest(bill))
     }
