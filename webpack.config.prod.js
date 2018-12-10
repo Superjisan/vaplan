@@ -6,6 +6,7 @@ var cssnext = require('postcss-cssnext');
 var postcssFocus = require('postcss-focus');
 var postcssReporter = require('postcss-reporter');
 var cssnano = require('cssnano');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   devtool: 'hidden-source-map',
@@ -116,6 +117,6 @@ module.exports = {
       filename: "chunk-manifest.json",
       manifestVariable: "webpackManifest",
     }),
-    new webpack.optimize.UglifyJsPlugin(),
+    new UglifyJSPlugin(),
   ],
 };
