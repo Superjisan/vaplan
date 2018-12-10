@@ -6,7 +6,7 @@ const allBills = require("../allBills.json");
 const allBillsNoDuplicates = _.uniqBy(allBills, 'number');
 const noDuplicateJSON = JSON.stringify(allBillsNoDuplicates);
 
-const fileName = `../../server/allBills.json`
+const fileName = `./server/allBills.json`
 
 fs.writeFile(fileName, noDuplicateJSON, (err) => {
     if(err) {

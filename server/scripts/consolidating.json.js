@@ -18,20 +18,12 @@ _.forEach(bills, bill => {
 allBills = _.uniqBy(allBills, 'number');
 const allBillsJSON = JSON.stringify(allBills);
 
-fs.writeFile(`../../server/allBills.json`, allBillsJSON, (err) => {
+fs.writeFile(`./server/allBills.json`, allBillsJSON, (err) => {
     if(err) {
         console.error(`something went wrong`, err)
     } else {
         console.log(`wrote file ./server/allBills.json`)
         
-        [firstJson, secondJson, thirdJson].forEach(filePath => {
-            fs.unlink(filePath, err => {
-                if(err) {
-                   console.error(`could not delete file ${filePath}`, err) 
-                } else {
-                    console.log(`deleted ${filePath}`)
-                }
-            })
-        })
+        
     }
 })

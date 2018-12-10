@@ -9,7 +9,7 @@ const session2019Url3 = `legp604.exe?191+lst+ALL+SJ0257`;
 const bills = {}
 let nextLink = ``
 
-const urlsToAddScrape = [session2019Url, session2019Url2, session2019Url3];
+const urlsToAddScrape = [session2019Url3];
 
 _.forEach(urlsToAddScrape, (url, index) => {
     osmosis
@@ -94,7 +94,7 @@ _.forEach(urlsToAddScrape, (url, index) => {
                 nextLink
             }
             const JSONToSave = JSON.stringify(dataToSave);
-            const fileName = `${index}_crawler_bill.json`;
+            const fileName = `${2}_crawler_bill.json`;
             fs.writeFile(`./server/${fileName}`, JSONToSave, (err) => {
                 if (err) {
                     console.error(`something went wrong`, err)
