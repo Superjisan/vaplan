@@ -27,7 +27,7 @@ export class BillListFilter extends Component {
         return (
             <div className="">
                 <h2>Search By</h2>
-                <label for="isFavorite">Favorite</label>
+                <label htmlFor="isFavorite">Favorite</label>
                 <input type="checkbox" checked={this.state.isFavorite} onChange={this.handleFavorite} />
                 <button onClick={this.handleSearchButton}>Search</button>
             </div>
