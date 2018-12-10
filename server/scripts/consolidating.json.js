@@ -1,16 +1,13 @@
 const fs = require('fs');
 const _ = require('lodash');
 
-const firstJson = require("../first_crawler_bill.json");
-const secondJson = require("../second_crawler_bill.json");
-const thirdJson = require("../third_crawler_bill.json");
+const firstJson = "../../server/0_crawler_bill.json";
+const secondJson = "../../server/1_crawler_bill.json";
+const thirdJson = "../../server/2_crawler_bill.json";
 
-const JSONFiles = [firstJson, secondJson, thirdJson];
+const JSONFiles = [require(firstJson), require(secondJson), require(thirdJson)];
 
 const bills = _.map(JSONFiles, 'bills');
-// console.log()
-// const firstBills = _.map(bills, bill => bill[0])
-// console.log("firstBill", bills[0]);
 let allBills = [];
 _.forEach(bills, bill => {
     for(let key in bill) {
@@ -18,8 +15,7 @@ _.forEach(bills, bill => {
     }
 });
 
-allBills = _.uniq(allBills, 'name');
-// console.log("allBills 0", allBills)
+allBills = _.uniqBy(allBills, 'number');
 const allBillsJSON = JSON.stringify(allBills);
 
 fs.writeFile(`./server/allBills.json`, allBillsJSON, (err) => {
@@ -27,5 +23,7 @@ fs.writeFile(`./server/allBills.json`, allBillsJSON, (err) => {
         console.error(`something went wrong`, err)
     } else {
         console.log(`wrote file ./server/allBills.json`)
+        
+        
     }
 })

@@ -27,7 +27,7 @@ export class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({isMounted: true}); // eslint-disable-line
+    this.setState({ isMounted: true }); // eslint-disable-line
   }
 
   toggleAddPostSection = () => {
@@ -37,11 +37,9 @@ export class App extends Component {
   render() {
     return (
       <div>
-        {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />}
         <div>
           <Helmet
-            title="MERN Starter - Blog App"
-            titleTemplate="%s - Blog App"
+            title="VA PLAN"
             meta={[
               { charset: 'utf-8' },
               {
@@ -52,6 +50,9 @@ export class App extends Component {
                 name: 'viewport',
                 content: 'width=device-width, initial-scale=1',
               },
+            ]}
+            link={[
+              { rel: "stylesheet", href: "https://fonts.googleapis.com/css?family=Roboto:300,400,500" }
             ]}
           />
           <Header

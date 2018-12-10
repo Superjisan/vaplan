@@ -14,7 +14,8 @@ const billSchema = new Schema({
   sponsor: {type: 'String'},
   link: {type: 'String'},
   historyItems: [historySchema],
-  isFavorite: {type: 'Boolean'}
+  isFavorite: {type: 'Boolean'},
+  summary: {type: 'String'}
 });
 
 export const History = mongoose.model('History', historySchema)
