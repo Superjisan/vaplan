@@ -29,10 +29,10 @@ BillList.propTypes = {
         committeeText: PropTypes.string,
         subcommitteText: PropTypes.string,
         summary: PropTypes.string,
-        history: PropTypes.shape({
+        historyItems: PropTypes.arrayOf(PropTypes.shape({
             text: PropTypes.string,
             date: PropTypes.string
-        })
+        }))
     })).isRequired,
   handleFavoriteBill: PropTypes.func.isRequired,
 };
