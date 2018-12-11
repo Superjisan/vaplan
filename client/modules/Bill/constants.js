@@ -1,0 +1,1 @@
+export const VIRGINIA_LEGISLATURE_WEBSITE = `http://lis.virginia.gov`;
