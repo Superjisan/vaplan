@@ -12,8 +12,6 @@ import Typography from '@material-ui/core/Typography';
 
 import { VIRGINIA_LEGISLATURE_WEBSITE } from '../../constants';
 
-// Import Style
-
 const materialStyles = theme => ({
   list: {
     width: '100%',
@@ -59,7 +57,7 @@ function BillListItem(props) {
             <FontAwesomeIcon icon={faExternalLinkAlt} />
           </a>
         </Typography>
-        <Typography variant="subtitle" component="span">
+        <Typography variant="subtitle1" component="span">
           Sponsored By {props.bill.sponsor}
         </Typography>
         <Typography variant="body1" component="p" className={classes.paragraph}>

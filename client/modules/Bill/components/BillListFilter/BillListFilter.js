@@ -9,6 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
 
 const materialStyles = theme => ({
     paper: {
@@ -32,7 +33,10 @@ const materialStyles = theme => ({
 export class BillListFilter extends Component {
     
     state = {
-        isFavorite: false
+        isFavorite: false,
+        committeeText: '',
+        number: '',
+        name: ''
     }
 
     handleFavorite = () => {
@@ -46,7 +50,22 @@ export class BillListFilter extends Component {
         if (this.state.isFavorite) {
             filter.isFavorite = true
         }
+        if(this.state.committeeText) {
+            filter.committeeText = this.state.committeeText
+        }
+        if(this.state.number) {
+            filter.number = this.state.number
+        }
+        if(this.state.name) {
+            filter.name = this.state.name
+        }
         this.props.handleSearch(filter)
+    }
+
+    handleChange = (stateProp) => event => {
+        this.setState({
+            [stateProp]: event.target.value
+        })
     }
 
     render() {
@@ -54,9 +73,51 @@ export class BillListFilter extends Component {
         return (
             <div>
                 <Paper className={classes.paper}>
-                    <Grid container space={20}> 
+                    <Grid container space={10}> 
                         <Grid item xs={12}>
                             <Typography variant="title" component="h4">Search By</Typography>
+                        </Grid>
+                        
+                        <Grid item xs={4}>
+                            <TextField
+                                id="number"
+                                label="Bill No."
+                                placeholder="Bill Number"
+                                value={this.state.number}
+                                onChange={this.handleChange('number')}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField
+                                id="name"
+                                label="Name"
+                                placeholder="Bill Name"
+                                value={this.state.name}
+                                onChange={this.handleChange('name')}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField
+                                id="committee-text"
+                                label="Committee"
+                                placeholder="Committee Name"
+                                value={this.state.committeeText}
+                                onChange={this.handleChange('committeeText')}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
                             <FormGroup >
                                 <FormControlLabel
                                     control={
@@ -70,7 +131,7 @@ export class BillListFilter extends Component {
                             </FormGroup>
                         </Grid>
                         <Grid item xs={11}></Grid>
-                        <Grid item xs={1} direction="row-reverse">
+                        <Grid item xs={1}>
                             <Button 
                                 variant="contained" 
                                 color="primary"
