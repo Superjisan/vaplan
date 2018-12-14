@@ -1,94 +1,17 @@
 import _ from 'lodash';
 
-import { scrapeBillsListPage } from '../util/scrapers';
-import { Bill } from '../models/bill';
+import {
+    scrapeBillsListPage,
+    scrapeBillsListPageDoneCB,
+    scrapeSingleBillPage
+} from '../util/scrapers';
+import { Bill, History } from '../models/bill';
 
 const setRegExFilter = (filter, fields, query) => {
     fields.forEach(field => {
         if (query[field]) filter[field] = new RegExp(query[field], 'i')
     });
     return filter
-}
-
-const scrapeBillsListPageDoneCB = (allBills, websiteUrl, res) => (err, data) => {
-    if (err) {
-        res.status(500).send(err);
-    } else {
-        console.log("scrape done")
-        const extractedBills = data.bills;
-        // _.forEach(extractedBills, bill => {
-        for (let key in extractedBills) {
-            allBills.push(extractedBills[key])
-        }
-        // });
-        if (data.nextLink) {
-            console.log("scraping next link", data.nextLink)
-            scrapeBillsListPage(
-                `${websiteUrl}${data.nextLink}`,
-                scrapeBillsListPageDoneCB(allBills, websiteUrl, res)
-            )
-        } else {
-
-            console.log("all scraping done, bills scraped:", allBills.length, allBills[0]);
-            allBills = _.uniqBy(allBills, 'number');
-            console.log("allBills uniq", allBills.length)
-            if (_.isEmpty(allBills)) {
-                res.status(500).send("scrape failed try again");
-            } else {
-                Bill.find().exec((err, bills) => {
-                    if (err) {
-                        res.status(500).send(err)
-                    } else {
-                        // check length of bills
-                        if (allBills.length === bills.length) {
-                            res.status(200).send("nothing to update")
-                        } else if (allBills.length > bills.length) {
-                            console.log("creating new bills")
-                            const billsToAdd = _.differenceBy(allBills, bills, 'number');
-                            console.log(`adding ${billsToAdd.length} bills`)
-                            const billsArr = _.map(billsToAdd, bill => {
-                                const { number, name, link } = bill;
-                                return {
-                                    number,
-                                    name,
-                                    link,
-                                    isFavorite: false
-                                }
-                            });
-                            Bill.create(billsArr, (err, newBills) => {
-                                if (err) {
-                                    console.error('something went wrong with bill creation', err)
-                                    res.status(500).send(err)
-                                } else {
-                                    console.log("all new bills created");
-                                    res.json({ newBills })
-                                }
-                            })
-                        } else if (allBills.length < bills.length) {
-                            console.log("allBills are more than bills length")
-                            const billsToAdd = _.differenceBy(allBills, bills, 'number');
-                            if (!billsToAdd.length) {
-                                res.status(200).send("nothing to update")
-                            } else {
-                                console.log("need to add new bills ", billsToAdd.length);
-                                Bill.create(billsArr, (err, newBills) => {
-                                    if (err) {
-                                        console.error('something went wrong with bill creation', err)
-                                        res.status(500).send(err)
-                                    } else {
-                                        console.log("all new bills created");
-                                        res.json({ newBills })
-                                    }
-                                })
-                            }
-                        }
-                    }
-                })
-            }
-
-
-        }
-    }
 }
 
 /**
@@ -136,4 +59,65 @@ export function checkForNewBills(req, res) {
         `${websiteUrl}${session2019Url}`,
         scrapeBillsListPageDoneCB(allBills, websiteUrl, res)
     );
+}
+
+export function updateSingleBill(req, res) {
+    const { bill } = req.body;
+    const websiteUrl = `http://lis.virginia.gov`;
+    scrapeSingleBillPage(`${websiteUrl}${bill.link}`, (err, data) => {
+        if (err) {
+            res.status(500).send(err)
+        } else {
+            const updatedBill = data.bill;
+            const ifUpdatedSummary = (!bill.summary && updatedBill.summary) || bill.summary !== updatedBill.summary;
+            const ifUpdatedCommitteeText = (!bill.committeeText && updatedBill.committeeText) || bill.committeeText !== updatedBill.committeeText;
+            const ifUpdatedSubCommitteeText = (!bill.subcommitteeText && updatedBill.subcommitteeText) || bill.subcommitteeText !== updatedBill.subcommitteeText;
+            const ifUpdatedSponsor = (!bill.sponsor && updatedBill.sponsor) || bill.sponsor !== updatedBill.sponsor;
+            if (_.isEmpty(bill.historyItems) || bill.historyItems.length < _.get(updatedBill, 'history.length')) {
+                let historyItemsToCreate = [];
+                if (!_.isEmpty(bill.historyItems)) {
+                    historyItemsToCreate = _.differenceBy(updatedBill.history)
+                } else {
+                    historyItemsToCreate = updatedBill.history;
+                }
+                History.create(historyItemsToCreate, (err, historyItems) => {
+                    if (err) {
+                        res.status(500).send(err);
+                    } else {
+                        if (!bill.historyItems) {
+                            updatedBill.historyItems = historyItems
+                        } else {
+                            updatedBill.historyItems = bill.historyItems;
+                            _.forEach(historyItems, item => {
+                                updatedBill.historyItems.push(item);
+                            })
+                        }
+                        Bill.findOneAndUpdate(
+                            { number: bill.number },
+                            updatedBill,
+                            { new: true },
+                            (err, newBill) => {
+                                if (err) {
+                                    res.status(500).send(err);
+                                }
+                                res.json({ bill: newBill });
+                            })
+                    }
+                })
+            } else if (ifUpdatedCommitteeText || ifUpdatedSponsor || ifUpdatedSummary || ifUpdatedSubCommitteeText) {
+                Bill.findOneAndUpdate(
+                    { number: bill.number },
+                    updatedBill,
+                    { new: true },
+                    (err, newBill) => {
+                        if (err) {
+                            res.status(500).send(err);
+                        }
+                        res.json({ bill: newBill });
+                    })
+            } else {
+                res.status(200).send("nothing to update");
+            }
+        }
+    })
 }
