@@ -87,21 +87,25 @@ _.forEach(urlsToAddScrape, (url, index) => {
             }
     
         })
+        .then(data => {
+            console.log("then data", data);
+        })
         .error(console.log)
         .done(data => {
+            console.log("data", data);
             const dataToSave = {
                 bills,
                 nextLink
             }
             const JSONToSave = JSON.stringify(dataToSave);
             const fileName = `${2}_crawler_bill.json`;
-            fs.writeFile(`./server/${fileName}`, JSONToSave, (err) => {
-                if (err) {
-                    console.error(`something went wrong`, err)
-                } else {
-                    console.log(`wrote file ${fileName}`)
-                }
-            })
+            // fs.writeFile(`./server/${fileName}`, JSONToSave, (err) => {
+            //     if (err) {
+            //         console.error(`something went wrong`, err)
+            //     } else {
+            //         console.log(`wrote file ${fileName}`)
+            //     }
+            // })
     
         })
 })
