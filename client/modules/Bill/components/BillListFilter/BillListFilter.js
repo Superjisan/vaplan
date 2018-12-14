@@ -78,7 +78,7 @@ export class BillListFilter extends Component {
                             <Typography variant="title" component="h4">Search By</Typography>
                         </Grid>
                         
-                        <Grid item xs={4}>
+                        <Grid item sm={4} xs={12}>
                             <TextField
                                 id="number"
                                 label="Bill No."
@@ -91,7 +91,7 @@ export class BillListFilter extends Component {
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item sm={4} xs={12}>
                             <TextField
                                 id="name"
                                 label="Name"
@@ -104,7 +104,7 @@ export class BillListFilter extends Component {
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item sm={4} xs={12}>
                             <TextField
                                 id="committee-text"
                                 label="Committee"
@@ -130,8 +130,8 @@ export class BillListFilter extends Component {
                                 />
                             </FormGroup>
                         </Grid>
-                        <Grid item xs={11}></Grid>
-                        <Grid item xs={1}>
+                        <Grid item xs={8} sm={10} md={11}></Grid>
+                        <Grid item xs={4} sm={2} md={1}>
                             <Button 
                                 variant="contained" 
                                 color="primary"
