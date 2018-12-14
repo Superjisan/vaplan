@@ -19,6 +19,23 @@ export function fetchBills() {
     }
 }
 
+export const checkForNewBills = bills => dispatch => {
+    return callApi('check-new-bills', 'post', { bills })
+        .then(res => {
+            console.log(res);
+            // put in a snack item to show how many new bills were fetched
+        })
+        .catch(err => console.error(err));
+}
+
+export const checkForUpdateBill = bill => dispatch => {
+    return callApi('check-for-update-bill', 'put', { bill })
+        .then(res => {
+            dispatch(updateBill(res.bill));
+        })
+        .catch(err => console.error(err));
+}
+
 export const updateBill = bill => {
     return {
         type: UPDATE_BILL,

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as faRegularStar } from '@fortawesome/free-regular-svg-icons';
-import { faStar as faSolidStar, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar as faSolidStar, faExternalLinkAlt, faSync } from '@fortawesome/free-solid-svg-icons';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -31,6 +31,8 @@ const materialStyles = theme => ({
   },
   fontIcon: {
     float: 'right',
+    marginRight: 5,
+    cursor: 'pointer'
   },
   paragraph: {
     marginTop: 10,
@@ -48,6 +50,11 @@ function BillListItem(props) {
       <Paper className={classes.paperRoot} elevation={1}>
         <Typography variant="title" component="h4">
           <a>{props.bill.name}</a>
+          <FontAwesomeIcon
+            className={classes.fontIcon}
+            icon={faSync}
+            onClick={() => props.onUpdateBill(props.bill)}
+          />
           <FontAwesomeIcon
             className={classes.fontIcon}
             icon={props.bill.isFavorite ? faSolidStar : faRegularStar}
@@ -113,6 +120,7 @@ BillListItem.propTypes = {
   }).isRequired,
   onFavorite: PropTypes.func.isRequired,
   classes: PropTypes.object,
+  onUpdateBill: PropTypes.func.isRequired
 };
 
 export default withStyles(materialStyles)(BillListItem);
