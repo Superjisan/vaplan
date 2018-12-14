@@ -11,6 +11,14 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
+const setConditionalFilterValues = (filter, fields, state) => {
+    fields.forEach(field => {
+        if (state[field]) {
+            filter[field] = state[field]
+        }
+    })
+}
+
 const materialStyles = theme => ({
     paper: {
         backgroundColor: blueGrey[100],
@@ -31,12 +39,14 @@ const materialStyles = theme => ({
 })
 
 export class BillListFilter extends Component {
-    
+
     state = {
         isFavorite: false,
         committeeText: '',
         number: '',
-        name: ''
+        name: '',
+        sponsor: '',
+        summary: ''
     }
 
     handleFavorite = () => {
@@ -50,15 +60,8 @@ export class BillListFilter extends Component {
         if (this.state.isFavorite) {
             filter.isFavorite = true
         }
-        if(this.state.committeeText) {
-            filter.committeeText = this.state.committeeText
-        }
-        if(this.state.number) {
-            filter.number = this.state.number
-        }
-        if(this.state.name) {
-            filter.name = this.state.name
-        }
+        const fieldsToAddToFilter = ['committeeText', 'number', 'name', 'sponsor', 'summary']
+        setConditionalFilterValues(filter, fieldsToAddToFilter, this.state)
         this.props.handleSearch(filter)
     }
 
@@ -69,15 +72,15 @@ export class BillListFilter extends Component {
     }
 
     render() {
-        const {classes} = this.props;
+        const { classes } = this.props;
         return (
             <div>
                 <Paper className={classes.paper}>
-                    <Grid container space={10}> 
+                    <Grid container space={10}>
                         <Grid item xs={12}>
                             <Typography variant="title" component="h4">Search By</Typography>
                         </Grid>
-                        
+
                         <Grid item sm={4} xs={12}>
                             <TextField
                                 id="number"
@@ -85,6 +88,32 @@ export class BillListFilter extends Component {
                                 placeholder="Bill Number"
                                 value={this.state.number}
                                 onChange={this.handleChange('number')}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item sm={4} xs={12}>
+                            <TextField
+                                id="sponsor"
+                                label="sponsor"
+                                placeholder="Bill Sponsor"
+                                value={this.state.sponsor}
+                                onChange={this.handleChange('sponsor')}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item sm={4} xs={12}>
+                            <TextField
+                                id="summary"
+                                label="summary"
+                                placeholder="Bill Summary"
+                                value={this.state.summary}
+                                onChange={this.handleChange('summary')}
                                 margin="normal"
                                 InputLabelProps={{
                                     shrink: true,
@@ -132,14 +161,14 @@ export class BillListFilter extends Component {
                         </Grid>
                         <Grid item xs={8} sm={10} md={11}></Grid>
                         <Grid item xs={4} sm={2} md={1}>
-                            <Button 
-                                variant="contained" 
+                            <Button
+                                variant="contained"
                                 color="primary"
                                 onClick={this.handleSearchButton}
                             >
                                 Search
                             </Button>
-                        
+
                         </Grid>
                     </Grid>
                 </Paper>
