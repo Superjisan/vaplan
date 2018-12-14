@@ -52,7 +52,16 @@ export class App extends Component {
               },
             ]}
             link={[
-              { rel: "stylesheet", href: "https://fonts.googleapis.com/css?family=Roboto:300,400,500" }
+              { 
+                rel: "stylesheet", 
+                href: "https://fonts.googleapis.com/css?family=Roboto:300,400,500" 
+              },
+              {
+                rel:'icon',
+                type:'image/png',
+                sizes:'16x16',
+                href:require("../../assets/va-plan.png")
+              }
             ]}
           />
           <Header
