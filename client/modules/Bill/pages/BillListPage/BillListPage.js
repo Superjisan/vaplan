@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import BillList from '../../components/BillList';
 import BillListFilter from '../../components/BillListFilter/BillListFilter';
 
-import { fetchBills, updateBillRequest, searchBillsRequest } from '../../BillActions';
+import { fetchBills, updateBillRequest, searchBillsRequest, checkForNewBills } from '../../BillActions';
 
 // Import Selectors
 import { getBills } from '../../BillReducer';
@@ -24,10 +24,14 @@ class BillListPage extends Component {
         this.props.dispatch(updateBillRequest(bill))
     }
 
+    handleCheckNewBills = () => {
+        this.props.dispatch(checkForNewBills(this.props.bills))
+    }
+
     render() {
         return (
             <div>
-                <BillListFilter handleSearch={this.handleSearch} />
+                <BillListFilter handleSearch={this.handleSearch} handleCheckNewBills={this.handleCheckNewBills} />
                 <BillList bills={this.props.bills} handleFavoriteBill={this.handleFavoriteBill} />
             </div>
         )

@@ -76,7 +76,7 @@ export class BillListFilter extends Component {
         return (
             <div>
                 <Paper className={classes.paper}>
-                    <Grid container space={10}>
+                    <Grid container spacing={16}>
                         <Grid item xs={12}>
                             <Typography variant="title" component="h4">Search By</Typography>
                         </Grid>
@@ -159,7 +159,17 @@ export class BillListFilter extends Component {
                                 />
                             </FormGroup>
                         </Grid>
-                        <Grid item xs={8} sm={10} md={11}></Grid>
+                        <Grid item xs={4} sm={8} md={8}></Grid>
+                        <Grid item xs={4} sm={2} md={2}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={this.props.handleCheckNewBills}
+                            >
+                                Check For New Bills
+                            </Button>
+
+                        </Grid>
                         <Grid item xs={4} sm={2} md={1}>
                             <Button
                                 variant="contained"
@@ -178,6 +188,7 @@ export class BillListFilter extends Component {
 }
 
 BillListFilter.propTypes = {
+    handleCheckNewBills: PropTypes.func,
     handleSearch: PropTypes.func,
     classes: PropTypes.object
 }

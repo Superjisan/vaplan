@@ -19,6 +19,14 @@ export function fetchBills() {
     }
 }
 
+export const checkForNewBills = bills => dispatch => {
+    return callApi('check-new-bills', 'post', { bills })
+        .then(res => {
+            console.log(res);
+        })
+        .catch(err => console.error(err));
+}
+
 export const updateBill = bill => {
     return {
         type: UPDATE_BILL,
