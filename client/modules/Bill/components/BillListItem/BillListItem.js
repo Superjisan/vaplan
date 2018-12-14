@@ -13,13 +13,12 @@ import Typography from '@material-ui/core/Typography';
 import { VIRGINIA_LEGISLATURE_WEBSITE } from '../../constants';
 
 // Import Style
-import styles from './BillListItem.css';
 
 const materialStyles = theme => ({
   list: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
-    paddingTop: 0
+    paddingTop: 0,
   },
   inline: {
     display: 'inline',
@@ -39,9 +38,9 @@ const materialStyles = theme => ({
     marginTop: 10,
   },
   listItem: {
-      paddingTop: 0,
-      paddingBottom: 0
-  }
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
 });
 
 function BillListItem(props) {
@@ -60,32 +59,34 @@ function BillListItem(props) {
             <FontAwesomeIcon icon={faExternalLinkAlt} />
           </a>
         </Typography>
-        <Typography 
-            variant="subtitle" 
-            component="span"
-        >
+        <Typography variant="subtitle" component="span">
           Sponsored By {props.bill.sponsor}
         </Typography>
         <Typography variant="body1" component="p" className={classes.paragraph}>
           <strong>Summary: </strong>
           {props.bill.summary}
         </Typography>
+        {props.bill.committeeText ? (
+          <Typography variant="body1" component="p" className={classes.paragraph}>
+            <strong>Committee: </strong>
+            {props.bill.committeeText}
+          </Typography>
+        ) : null}
+
         <Typography variant="body1" component="span" className={classes.paragraph}>
           <strong>History</strong>
         </Typography>
         <List className={classes.list}>
           {props.bill.historyItems.map(item => {
             return (
-              <ListItem
-                className={classes.listItem}
-                alignItems="flex-start" 
-                key={item._id}>
-                <ListItemText 
-                    primary={`- ${item.text}`}
-                    primaryTypographyProps={{
-                        variant: "body1",
-                        component: "span"
-                    }} />
+              <ListItem className={classes.listItem} alignItems="flex-start" key={item._id}>
+                <ListItemText
+                  primary={`- ${item.text}`}
+                  primaryTypographyProps={{
+                    variant: 'body1',
+                    component: 'span',
+                  }}
+                />
               </ListItem>
             );
           })}

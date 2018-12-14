@@ -6,14 +6,9 @@ import blueGrey from '@material-ui/core/colors/blueGrey';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Typography from '@material-ui/core/Typography';
-
-// Import Style
-import styles from './BillListFilter.css';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 const materialStyles = theme => ({
     paper: {
@@ -24,13 +19,14 @@ const materialStyles = theme => ({
         paddingRight: theme.spacing.unit * 2,
         marginTop: theme.spacing.unit * 2,
         marginBottom: theme.spacing.unit * 2,
+
     },
     formControl: {
         margin: theme.spacing.unit * 3,
     },
     group: {
         margin: `${theme.spacing.unit}px 0`,
-    },
+    }
 })
 
 export class BillListFilter extends Component {
@@ -58,22 +54,33 @@ export class BillListFilter extends Component {
         return (
             <div>
                 <Paper className={classes.paper}>
-                    <Typography variant="title" component="h4">Search By</Typography>
-                    <FormGroup >
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={this.state.isFavorite}
-                                    onChange={this.handleFavorite}
+                    <Grid container space={20}> 
+                        <Grid item xs={12}>
+                            <Typography variant="title" component="h4">Search By</Typography>
+                            <FormGroup >
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={this.state.isFavorite}
+                                            onChange={this.handleFavorite}
+                                        />
+                                    }
+                                    label="Favorited"
                                 />
-                            }
-                            label="Favorited"
-                        />
-                    </FormGroup>
-                    
-                    <div className={styles['form-content']}>
-                        <button className={styles['search-submit-button']} onClick={this.handleSearchButton}>Search</button>
-                    </div>
+                            </FormGroup>
+                        </Grid>
+                        <Grid item xs={11}></Grid>
+                        <Grid item xs={1} direction="row-reverse">
+                            <Button 
+                                variant="contained" 
+                                color="primary"
+                                onClick={this.handleSearchButton}
+                            >
+                                Search
+                            </Button>
+                        
+                        </Grid>
+                    </Grid>
                 </Paper>
             </div>
         )
