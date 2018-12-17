@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import blueGrey from '@material-ui/core/colors/blueGrey';
+import green from '@material-ui/core/colors/green';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -10,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+
+import { BILL_FILTER_INITIAL_STATE } from "../../constants";
 
 const setConditionalFilterValues = (filter, fields, state) => {
     fields.forEach(field => {
@@ -35,18 +39,36 @@ const materialStyles = theme => ({
     },
     group: {
         margin: `${theme.spacing.unit}px 0`,
+    },
+    button: {
+        marginLeft: 10,
+        marginTop: 10
+    },
+    buttonGreen: {
+        backgroundColor: green[100]
     }
 })
 
 export class BillListFilter extends Component {
 
-    state = {
-        isFavorite: false,
-        committeeText: '',
-        number: '',
-        name: '',
-        sponsor: '',
-        summary: ''
+    state = BILL_FILTER_INITIAL_STATE;
+
+    handleReset = () => {
+        this.setState(BILL_FILTER_INITIAL_STATE, this.handleSearchButton);
+    }
+
+    handleIncomplete = () => {
+        const stateToSet = {}
+        if (!this.state.isIncomplete) {
+            stateToSet.isFavorite = false;
+            stateToSet.committeeText = '';
+            stateToSet.number = '';
+            stateToSet.sponsor = '';
+            stateToSet.summary = '';
+            stateToSet.name = '';
+        }
+        stateToSet.isIncomplete = !this.state.isIncomplete;
+        this.setState(stateToSet);
     }
 
     handleFavorite = () => {
@@ -58,7 +80,10 @@ export class BillListFilter extends Component {
     handleSearchButton = () => {
         const filter = {};
         if (this.state.isFavorite) {
-            filter.isFavorite = true
+            filter.isFavorite = true;
+        }
+        if (this.state.isIncomplete) {
+            filter.isIncomplete = true;
         }
         const fieldsToAddToFilter = ['committeeText', 'number', 'name', 'sponsor', 'summary']
         setConditionalFilterValues(filter, fieldsToAddToFilter, this.state)
@@ -97,7 +122,7 @@ export class BillListFilter extends Component {
                         <Grid item sm={4} xs={12}>
                             <TextField
                                 id="sponsor"
-                                label="sponsor"
+                                label="Sponsor"
                                 placeholder="Bill Sponsor"
                                 value={this.state.sponsor}
                                 onChange={this.handleChange('sponsor')}
@@ -110,7 +135,7 @@ export class BillListFilter extends Component {
                         <Grid item sm={4} xs={12}>
                             <TextField
                                 id="summary"
-                                label="summary"
+                                label="Summary"
                                 placeholder="Bill Summary"
                                 value={this.state.summary}
                                 onChange={this.handleChange('summary')}
@@ -146,7 +171,7 @@ export class BillListFilter extends Component {
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sm={4}>
                             <FormGroup >
                                 <FormControlLabel
                                     control={
@@ -159,22 +184,47 @@ export class BillListFilter extends Component {
                                 />
                             </FormGroup>
                         </Grid>
-                        <Grid item xs={4} sm={8} md={8}></Grid>
-                        <Grid item xs={4} sm={2} md={2}>
+                        <Grid item xs={12} sm={4}>
+                            <FormGroup >
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={this.state.isIncomplete}
+                                            onChange={this.handleIncomplete}
+                                        />
+                                    }
+                                    label="Incomplete"
+                                />
+                            </FormGroup>
+                        </Grid>
+                    </Grid>
+                    <Grid container
+                        spacing={8}
+                        justify="flex-end"
+                        alignItems="flex-start"
+                    >
+                        <Grid item xs={12} sm={6} md={4}>
                             <Button
                                 variant="contained"
-                                color="primary"
+                                color="secondary"
                                 onClick={this.props.handleCheckNewBills}
+                                className={classes.button}
                             >
-                                Check For New Bills
+                                Sync Bills
                             </Button>
-
-                        </Grid>
-                        <Grid item xs={4} sm={2} md={1}>
+                            <Button
+                                variant="contained"
+                                color={green}
+                                onClick={this.handleReset}
+                                className={classNames(classes.button, classes.buttonGreen)}
+                            >
+                                Reset
+                            </Button>
                             <Button
                                 variant="contained"
                                 color="primary"
                                 onClick={this.handleSearchButton}
+                                className={classes.button}
                             >
                                 Search
                             </Button>

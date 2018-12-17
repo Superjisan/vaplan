@@ -15,7 +15,7 @@ const setRegExFilter = (filter, fields, query) => {
 }
 
 /**
- * Get all bills
+ * Get bills based on search
  * @param req
  * @param res
  * @returns void
@@ -25,6 +25,10 @@ export function getBills(req, res) {
     if (req.query) {
         if (req.query.isFavorite) {
             filter.isFavorite = req.query.isFavorite;
+        }
+        if (req.query.isIncomplete) {
+            filter.sponsor = { "$exists": false };
+            filter.summary = { "$exists": false };
         }
         const fieldsToSearchOn = ['committeeText', 'number', 'name', 'sponsor', 'summary'];
         filter = setRegExFilter(filter, fieldsToSearchOn, req.query);
@@ -39,7 +43,11 @@ export function getBills(req, res) {
             res.json({ bills });
         });
 }
-
+/**
+ * Update a bill
+ * @param {*} req Express object with params, body
+ * @param {*} res Express response
+ */
 export function updateBill(req, res) {
     const { number } = req.params;
     const { bill } = req.body
@@ -51,6 +59,10 @@ export function updateBill(req, res) {
     })
 }
 
+/**
+ * 
+ * 
+ */
 export function checkForNewBills(req, res) {
     const websiteUrl = `http://lis.virginia.gov`;
     const session2019Url = `/cgi-bin/legp604.exe?191+lst+ALL`;
@@ -61,6 +73,10 @@ export function checkForNewBills(req, res) {
     );
 }
 
+/**
+ * 
+ * 
+ */
 export function updateSingleBill(req, res) {
     const { bill } = req.body;
     const websiteUrl = `http://lis.virginia.gov`;
@@ -69,10 +85,12 @@ export function updateSingleBill(req, res) {
             res.status(500).send(err)
         } else {
             const updatedBill = data.bill;
+            // conditions to update the bill in database
             const ifUpdatedSummary = (!bill.summary && updatedBill.summary) || bill.summary !== updatedBill.summary;
             const ifUpdatedCommitteeText = (!bill.committeeText && updatedBill.committeeText) || bill.committeeText !== updatedBill.committeeText;
             const ifUpdatedSubCommitteeText = (!bill.subcommitteeText && updatedBill.subcommitteeText) || bill.subcommitteeText !== updatedBill.subcommitteeText;
             const ifUpdatedSponsor = (!bill.sponsor && updatedBill.sponsor) || bill.sponsor !== updatedBill.sponsor;
+
             if (_.isEmpty(bill.historyItems) || bill.historyItems.length < _.get(updatedBill, 'history.length')) {
                 let historyItemsToCreate = [];
                 if (!_.isEmpty(bill.historyItems)) {
