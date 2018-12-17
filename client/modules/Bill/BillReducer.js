@@ -1,9 +1,9 @@
 import _ from "lodash";
 
-import { UPDATE_BILL, ADD_BILLS } from './BillActions';
+import { UPDATE_BILL, ADD_BILLS, ADD_NOTIFICATION } from './BillActions';
 
 // Initial State
-const initialState = { data: [] };
+const initialState = { data: [], notification: {} };
 
 const BillReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -12,7 +12,9 @@ const BillReducer = (state = initialState, action) => {
       const copyState = _.cloneDeep(state);
       copyState.data[billToUpdateIndex] = action.bill
       return copyState
-
+    case ADD_NOTIFICATION:
+      const stateToReturn = { ...state, notification: action.notification };
+      return stateToReturn
     case ADD_BILLS:
       return {
         data: action.bills,
@@ -25,11 +27,14 @@ const BillReducer = (state = initialState, action) => {
 
 /* Selectors */
 
-// Get all posts
+// Get bills
 export const getBills = state => state.bills.data;
 
-// Get post by cuid
+// Get specific bill
 export const getBill = (state, number) => state.bills.data.filter(bill => bill.number === number)[0];
+
+// 
+export const getNotification = (state) => state.bills.notification
 
 // Export Reducer
 export default BillReducer;
