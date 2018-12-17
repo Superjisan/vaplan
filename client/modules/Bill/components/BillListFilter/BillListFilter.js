@@ -214,7 +214,7 @@ export class BillListFilter extends Component {
                             </Button>
                             <Button
                                 variant="contained"
-                                color={green}
+                                color="primary"
                                 onClick={this.handleReset}
                                 className={classNames(classes.button, classes.buttonGreen)}
                             >
